@@ -1,5 +1,15 @@
 # rtf_urg
 
+## Linux
+
+```bash
+mkdir build && cd build
+cmake ../linux
+make && ./urg_linux
+```
+
+## ROS 2
+
 ```bash
 cd ros_ws
 colcon build
