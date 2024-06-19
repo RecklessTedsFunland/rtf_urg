@@ -1,0 +1,6 @@
+old
+build
+__pycache__
+
+._*
+.DS_Store
