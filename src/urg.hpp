@@ -90,19 +90,22 @@ these 64B rows need to be combined into one long one
 #include "serial_port.hpp"
 
 constexpr int URG_BUFFER_SIZE = 2200; // 2134
-constexpr int URG_MSG_LEN = 682*3; // 3 char range
-constexpr int URG_INTENSITY_LEN = 682;
-constexpr float ANGLE_MIN = -135.0f;
-constexpr float ANGLE_MAX = 135.0f;
-constexpr float ANGLE_INC = 270.0/1024.0; // or 360/1024???
-constexpr float RANGE_MIN = 1.0f;
-constexpr float RANGE_MAX = 135.f;
+constexpr int URG_MSG_LEN = 682;
+constexpr int URG_TMP_LEN = 682*3; // 3 char range
+constexpr int URG_MIN_CNT = 44;
+constexpr int URG_MID_CNT = 384;
+constexpr int URG_MAX_CNT = 725;
+constexpr float URG_ANGLE_INC = 360.0/1024.0;
+constexpr float URG_ANGLE_MIN = (URG_MIN_CNT-URG_MID_CNT)*URG_ANGLE_INC; // neg
+constexpr float URG_ANGLE_MAX = (URG_MAX_CNT-URG_MID_CNT)*URG_ANGLE_INC; // pos
+constexpr float URG_RANGE_MIN = 0.2f;
+constexpr float URG_RANGE_MAX = 5.6f;
 
 using std::string;
 using std::vector;
-using std::array;
+// using std::array;
 
-typedef array<array<uint8_t,66>,36> ScanMsg;
+// typedef array<array<uint8_t,66>,36> ScanMsg;
 
 // sensor_msgs/LaserScan Message
 // ------------------------------
@@ -127,7 +130,7 @@ class URG {
   }
 
   bool open(const string& port, int baud=19200) {
-    printf(">> open(%s,%d) START\n", port.c_str(), baud);
+    // printf(">> open(%s,%d) START\n", port.c_str(), baud);
     bool ok = serial.open(port, baud);
     if (!ok) return false;
 
@@ -138,13 +141,13 @@ class URG {
     // get flushed?
     ok = command("SCIP2.0\n","SCIP2.0\n0Ee\n\n");
     if (!ok) {
-      printf("*** Failed to enter scip 2.0 mode\n");
+      // printf("*** Failed to enter scip 2.0 mode\n");
       return false;
     }
 
     // get_parameter()
 
-    printf(">> open SUCCESS\n");
+    // printf(">> open SUCCESS\n");
 
     return true;
   }
@@ -253,7 +256,7 @@ class URG {
     // int line = 0;
     for (int i=0; i<682; ++i) {
       // if (i%10 == 0) printf("\n[%d]: ", line++);
-      intensities[i] = decode_3(&tmp_buf[p]);
+      ranges[i] = decode_3(&tmp_buf[p]);
       p += 3;
       // printf("%.1f,",intensities[i]);
     }
@@ -263,15 +266,17 @@ class URG {
   }
 
   float ranges[URG_MSG_LEN]{0.0f};
-  float intensities[URG_MSG_LEN]{0.0f};
+  // float intensities[URG_MSG_LEN]{0.0f};
   bool laser_on{false};
 
 protected:
   SerialPort serial;
   uint8_t buffer[URG_BUFFER_SIZE]{0};
-  uint8_t tmp_buf[URG_INTENSITY_LEN]{0};
+  uint8_t tmp_buf[URG_TMP_LEN]{0};
 
   // 3 char code -> distance [m]
+  // URG returns range in mm, so divide by 1000
+  // to get meters.
   float decode_3(uint8_t *encode_str) {
     int decode{0};
 

@@ -32,7 +32,7 @@ int main() {
 
     for (int i=0; i<682; ++i) {
       if (i%10 == 0) printf("\n");
-      printf("%.1f, ", lidar.intensities[i]);
+      printf("%.1f, ", lidar.ranges[i]);
     }
   }
 

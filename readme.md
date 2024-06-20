@@ -16,6 +16,12 @@ colcon build
 ros2 run rtf_urg <binary>
 ```
 
+- Publishes `sensor_msgs::msg::LaserScan` on topic `/lidar`
+
+## ToDo
+
+- 20Jun2024: `urg_node` is using 100% of 1 core right now ... need to fix this.
+
 # MIT License
 
 **Copyright (c) 2024 Reckless Ted's Funland**
