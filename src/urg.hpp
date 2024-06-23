@@ -236,43 +236,88 @@ class URG {
     return true;
   }
 
+  // bool process_buffer() {
+  //   // first pass, consilidates 64B chuncks into one
+  //   // array for processing
+  //   int p=23;
+  //   int n=0;
+  //   for (int pkts=0; pkts<32; pkts++) {
+  //     for (int i=0; i<64; i++) {
+  //       uint8_t c = buffer[p+i];
+  //       if (c == (uint8_t)'\n') break;
+  //       tmp_buf[n++] = c;
+  //     }
+  //     p += 66;
+  //   }
+
+  //   // now process the 682*3B array into intensities
+  //   // printf("--------------------------\n");
+  //   p = 0;
+  //   // int line = 0;
+  //   for (int i=0; i<682; ++i) {
+  //     // if (i%10 == 0) printf("\n[%d]: ", line++);
+  //     ranges[i] = decode_3(&tmp_buf[p]);
+  //     p += 3;
+  //     // printf("%.1f,",intensities[i]);
+  //   }
+  //   // printf("\n--------------------------\n");
+
+  //   return true;
+  // }
+
   bool process_buffer() {
     // first pass, consilidates 64B chuncks into one
     // array for processing
     int p=23;
-    int n=0;
+    // int n=0;
+    // for (int pkts=0; pkts<32; pkts++) {
+    //   for (int i=0; i<64; i++) {
+    //     uint8_t c = buffer[p+i];
+    //     if (c == (uint8_t)'\n') break;
+    //     tmp_buf[n++] = c;
+    //   }
+    //   p += 66;
+    // }
+    int tp = 0;
+    int ti = 0;
+    uint8_t tmp_buf[3];
     for (int pkts=0; pkts<32; pkts++) {
       for (int i=0; i<64; i++) {
         uint8_t c = buffer[p+i];
         if (c == (uint8_t)'\n') break;
-        tmp_buf[n++] = c;
+        tmp_buf[tp++] = c;
+        if (tp == 3) {
+          tp = 0;
+          ranges[ti++] = decode_3(tmp_buf);
+        }
       }
       p += 66;
     }
 
-    // now process the 682*3B array into intensities
-    // printf("--------------------------\n");
-    p = 0;
-    // int line = 0;
-    for (int i=0; i<682; ++i) {
-      // if (i%10 == 0) printf("\n[%d]: ", line++);
-      ranges[i] = decode_3(&tmp_buf[p]);
-      p += 3;
-      // printf("%.1f,",intensities[i]);
-    }
-    // printf("\n--------------------------\n");
+    // // now process the 682*3B array into intensities
+    // // printf("--------------------------\n");
+    // p = 0;
+    // // int line = 0;
+    // for (int i=0; i<682; ++i) {
+    //   // if (i%10 == 0) printf("\n[%d]: ", line++);
+    //   ranges[i] = decode_3(&tmp_buf[p]);
+    //   p += 3;
+    //   // printf("%.1f,",intensities[i]);
+    // }
+    // // printf("\n--------------------------\n");
 
     return true;
   }
 
-  float ranges[URG_MSG_LEN]{0.0f};
+  // float ranges[URG_MSG_LEN]{0.0f};
+  std::array<float,URG_MSG_LEN> ranges;
   // float intensities[URG_MSG_LEN]{0.0f};
   bool laser_on{false};
 
 protected:
   SerialPort serial;
   uint8_t buffer[URG_BUFFER_SIZE]{0};
-  uint8_t tmp_buf[URG_TMP_LEN]{0};
+  // uint8_t tmp_buf[URG_TMP_LEN]{0};
 
   // 3 char code -> distance [m]
   // URG returns range in mm, so divide by 1000

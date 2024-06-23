@@ -57,12 +57,6 @@ find_package(geometry_msgs REQUIRED)
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_SOURCE_DIR}/src)
 
-# add_executable(urg_linux
-#     ${CMAKE_SOURCE_DIR}/src/urg_linux.cpp)
-# # target_include_directories(node PUBLIC
-# #     ${CMAKE_SOURCE_DIR}/src)
-# target_link_libraries(urg_linux PRIVATE ${PROJECT_NAME})
-
 add_executable(rtf_urg
     "${CMAKE_SOURCE_DIR}/src/urg_node.cpp")
 target_link_libraries(rtf_urg)

@@ -50,7 +50,7 @@ add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_SOURCE_DIR}/../src)
 
 add_executable(urg_linux
-    ${CMAKE_SOURCE_DIR}/../src/urg_linux.cpp)
+    ${CMAKE_SOURCE_DIR}/urg_linux.cpp)
 # target_include_directories(node PUBLIC
 #     ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(urg_linux PRIVATE ${PROJECT_NAME})
