@@ -5,10 +5,15 @@
 // #include "sensor_msgs/msg/fluid_pressure.hpp"
 // #include "sensor_msgs/msg/temperature.hpp"
 #include <string>
-
 #include "urg.hpp"
 // #include <squaternion.hpp>
 // #include <quaternion_filters.hpp>
+
+#if defined(__linux__)
+#define URG_DEFAULT_SERIAL_PORT "/dev/serial/by-id/usb-Hokuyo_Data_Flex_for_USB_URG-Series_USB_Driver-if00"
+#else
+#define URG_DEFAULT_SERIAL_PORT "/dev/tty.usbmodem14501"
+#endif
 
 using std::string;
 using namespace std::chrono_literals;  // cpp_std s,ms,etc
@@ -16,13 +21,15 @@ using namespace std::chrono_literals;  // cpp_std s,ms,etc
 constexpr string FRAME_ID = "lidar";
 
 
+
 class rtfUrg : public rclcpp::Node {
 public:
   rtfUrg(): Node("rtf_urg") {
     RCLCPP_INFO(this->get_logger(), "rtf_urg: CTRL+C to exit!");
 
+    port = this->declare_parameter<std::string>("urg_port", URG_DEFAULT_SERIAL_PORT);
+
     // Setup sensor ---------------------------------------
-    string port = "/dev/serial/by-id/usb-Hokuyo_Data_Flex_for_USB_URG-Series_USB_Driver-if00";
     int baud = 19200;
 
     bool ok = lidar.open(port, baud);
@@ -37,7 +44,7 @@ public:
       RCLCPP_ERROR(this->get_logger(),"*** Cannot turn ON laser ***\n");
       // return 1;
     }
-    else RCLCPP_INFO(this->get_logger(),">> Laser is ON\n");
+    // else RCLCPP_INFO(this->get_logger(),">> Laser is ON\n");
 
     // Setup publishers -----------------------------------
     pub_urg = this->create_publisher<sensor_msgs::msg::LaserScan>("lidar", 10);
@@ -49,6 +56,7 @@ public:
   }
 
   ~rtfUrg() {
+    lidar.close();
     RCLCPP_INFO(this->get_logger(), "Bye rtf_urg!");
   }
 
@@ -72,13 +80,13 @@ public:
     // memcpy((void*)msg.ranges, lidar.ranges, 682*sizeof(float));
     // for (int i=0; i<682; ++i) msg.ranges.push_back(lidar.ranges[i]);
     msg.ranges.resize(682);
-    memcpy(&msg.ranges[0], lidar.ranges, 682*sizeof(float));
+    memcpy((void*)&msg.ranges[0], (void*)&lidar.ranges[0], 682*sizeof(float));
 
     pub_urg->publish(msg);
   }
 
   URG lidar;
-
+  std::string port;
   rclcpp::TimerBase::SharedPtr timer;
   rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr pub_urg;
 };

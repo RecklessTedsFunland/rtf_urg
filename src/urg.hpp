@@ -163,12 +163,18 @@ class URG {
     bool ok = false;
     if (status == true) {
       ok = command("BM\n","BM\n00P\n\n","BM\n02R\n\n");
-      if (ok) laser_on = true;
+      if (ok) {
+        laser_on = true;
+        printf(">> Laser ON\n");
+      }
       else laser_on = false;
     }
     else {
       ok = command("QT\n","QT\n00P\n\n");
-      if (ok) laser_on = false;
+      if (ok) {
+        laser_on = false;
+        printf(">> Laser OFF\n");
+      }
       else laser_on = true;
     }
 
