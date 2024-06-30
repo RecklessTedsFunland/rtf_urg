@@ -10,41 +10,41 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 string (APPEND CMAKE_CXX_FLAGS_RELEASE " -O3 ")
 string (APPEND CMAKE_C_FLAGS_RELEASE " -O3 ")
 
-if(PROJECT_IS_TOP_LEVEL)
-    cmake_host_system_information(RESULT HOST QUERY HOSTNAME)
-    cmake_host_system_information(RESULT OSN QUERY OS_NAME)
-    cmake_host_system_information(RESULT OS_VERSION QUERY OS_RELEASE)
-    cmake_host_system_information(RESULT PROC QUERY PROCESSOR_DESCRIPTION)
+# if(PROJECT_IS_TOP_LEVEL)
+#     cmake_host_system_information(RESULT HOST QUERY HOSTNAME)
+#     cmake_host_system_information(RESULT OSN QUERY OS_NAME)
+#     cmake_host_system_information(RESULT OS_VERSION QUERY OS_RELEASE)
+#     cmake_host_system_information(RESULT PROC QUERY PROCESSOR_DESCRIPTION)
 
-    message(STATUS "-------------------------------------")
-    message(STATUS "  Project: ${PROJECT_NAME}")
-    message(STATUS "  Version: ${CMAKE_PROJECT_VERSION}")
-    message(STATUS "  C++ ${CMAKE_CXX_STANDARD}")
-    message(STATUS "  C ${CMAKE_C_STANDARD}")
-    message(STATUS "-------------------------------------")
-    message(STATUS " Host: ${HOST}")
-    message(STATUS " ${OSN}: ${OS_VERSION}")
-    message(STATUS " ${PROC}")
-    message(STATUS "-------------------------------------")
+#     message(STATUS "-------------------------------------")
+#     message(STATUS "  Project: ${PROJECT_NAME}")
+#     message(STATUS "  Version: ${CMAKE_PROJECT_VERSION}")
+#     message(STATUS "  C++ ${CMAKE_CXX_STANDARD}")
+#     message(STATUS "  C ${CMAKE_C_STANDARD}")
+#     message(STATUS "-------------------------------------")
+#     message(STATUS " Host: ${HOST}")
+#     message(STATUS " ${OSN}: ${OS_VERSION}")
+#     message(STATUS " ${PROC}")
+#     message(STATUS "-------------------------------------")
 
-    set(BUILD_EXAMPLES ON)
-    set(BUILD_GTESTS ON)
+#     set(BUILD_EXAMPLES ON)
+#     set(BUILD_GTESTS ON)
 
-    # GTest -----------------
-    # include(FetchContent)
+#     # GTest -----------------
+#     # include(FetchContent)
 
-    # FetchContent_Declare(gtest
-    #     GIT_REPOSITORY "https://github.com/google/googletest"
-    #     GIT_TAG "origin/main"
-    # )
+#     # FetchContent_Declare(gtest
+#     #     GIT_REPOSITORY "https://github.com/google/googletest"
+#     #     GIT_TAG "origin/main"
+#     # )
 
-    # FetchContent_MakeAvailable(gtest)
+#     # FetchContent_MakeAvailable(gtest)
 
-else()
-    message(STATUS "-> ${PROJECT_NAME} is submodule")
-    set(BUILD_EXAMPLES OFF)
-    set(BUILD_GTESTS OFF)
-endif()
+# else()
+#     message(STATUS "-> ${PROJECT_NAME} is submodule")
+#     set(BUILD_EXAMPLES OFF)
+#     set(BUILD_GTESTS OFF)
+# endif()
 
 
 # find dependencies
