@@ -11,9 +11,8 @@ make && ./urg_linux
 ## ROS 2
 
 ```bash
-cd ros_ws
-colcon build
-ros2 run rtf_urg <binary>
+colcon build --packages-select rtf_urg
+ros2 run rtf_urg <node>
 ```
 
 - Publishes `sensor_msgs::msg::LaserScan` on topic `/lidar`

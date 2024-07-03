@@ -1,0 +1,4 @@
+---
+urg_node:
+  ros__parameters:
+    x: 0.0

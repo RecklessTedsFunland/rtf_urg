@@ -65,10 +65,15 @@ ament_target_dependencies(rtf_urg rclcpp std_msgs sensor_msgs geometry_msgs)
 
 # you NEED this so setup.bash can find the binary
 install(
-  TARGETS
-    rtf_urg
-  DESTINATION
-    "lib/${PROJECT_NAME}"
+    TARGETS rtf_urg
+    DESTINATION "lib/${PROJECT_NAME}"
+)
+
+install(DIRECTORY launch
+    DESTINATION share/${PROJECT_NAME})
+
+install(DIRECTORY config
+    DESTINATION share/${PROJECT_NAME}
 )
 
 # # ----------------------------------------------
