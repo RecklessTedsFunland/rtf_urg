@@ -120,6 +120,8 @@ using std::vector;
 // float32[] ranges
 // float32[] intensities
 
+namespace urg {
+
 class URG {
   public:
   URG() {}
@@ -343,3 +345,4 @@ protected:
 
 };
 
+} // urg namespace end

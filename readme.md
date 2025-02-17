@@ -1,11 +1,28 @@
 # rtf_urg
 
-## Linux
+## Foxglove
+
+linux
+
+```
+apt install -y protobuf-compiler
+```
+
+macOS
+
+```
+brew install protobuf
+brew install mcap
+pip install -U protobuf mcap mcap-protobuf-support foxglove-schemas-protobuf
+```
+
+
+## Linux / macOS
 
 ```bash
 mkdir build && cd build
-cmake ../linux
-make && ./urg_linux
+cmake ..
+make && examples/urg_node
 ```
 
 ## ROS 2
@@ -20,6 +37,10 @@ ros2 run rtf_urg <node>
 ## ToDo
 
 - 20Jun2024: `urg_node` is using 100% of 1 core right now ... need to fix this.
+
+## References
+
+- [mcap-protobuf](https://github.com/MomsFriendlyRobotCompany/mcap-protobuf)
 
 # MIT License
 
