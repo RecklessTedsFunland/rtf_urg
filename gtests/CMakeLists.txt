@@ -2,13 +2,14 @@
 # GTest -----------------
 include(FetchContent)
 
-FetchContent_Declare(gtest
-  GIT_REPOSITORY "https://github.com/google/googletest"
-  GIT_TAG "origin/main"
-)
+find_package(GTest REQUIRED)
 
-FetchContent_MakeAvailable(gtest)
-if(gtest_POPULATED)
+# FetchContent_Declare(gtest
+#   GIT_REPOSITORY "https://github.com/google/googletest"
+#   GIT_TAG "origin/main"
+# )
+# FetchContent_MakeAvailable(gtest)
+if(GTest_FOUND)
     message(STATUS "=> Found gtest")
 else()
     message(STATUS "*** Didn't find gtest")
@@ -27,6 +28,7 @@ foreach(name ${gci-gtests})
     add_executable(${name} ${name}.cpp)
     target_link_libraries(${name}
         GTest::gtest_main
+        # GTest::gtest
         ${PROJECT_NAME})
     add_test(NAME ${name} COMMAND ${name})
 endforeach()
